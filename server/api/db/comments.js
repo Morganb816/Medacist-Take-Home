@@ -138,7 +138,7 @@ const getComment = async (docId) => {
 const getCommentsForPost = async (postId) => {
     const commentQuery = await admin.firestore()
             .collection(COMMENTS_COLLECTION)
-            .where(POST_ID, '==', Number(postId))
+            .where(POST_ID, '==', postId)
             .get();
 
     const likesArray = await Promise.all(commentQuery.docs.map(doc => getLikesForComment(doc.id)));

@@ -6,9 +6,7 @@ const morgan = require('morgan');
 
 initializeFirebase();
 const app = express();
-
 app.use(morgan('tiny'));
-
 // Setup cors. (dont use origin true in prod)
 app.use(cors({ origin: true }));
 // Setup main router

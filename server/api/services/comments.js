@@ -39,8 +39,8 @@ const makeLikeService = serviceFactory(async (req, res) => {
     if (req.body.isLike === undefined) notSpecifiedLike.emit();
     
     try {
-        await alreadyLiked(req.body.commentId, Number(req.body.userId));
-        await deleteLike(req.body.commentId, Number(req.body.userId));
+        await alreadyLiked(req.body.commentId, req.body.userId);
+        await deleteLike(req.body.commentId, req.body.userId);
     } catch (err) {
         if (err.message !== 'No Like Found') {
             throw new Error(err.message);
