@@ -2,4 +2,4 @@
 
 server/serviceAccount.json
 
-server/firestore-debug.log
+server/**/firestore-debug.log
