@@ -1,0 +1,176 @@
+{
+	"info": {
+		"_postman_id": "8d8238b5-5c7f-4399-9266-6e45220d33bb",
+		"name": "Medacist Take Home",
+		"description": "Postman collection used for testing the backend of the Medacist Take Home assesment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Post Comment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"postId\": \"2\",\n    \"userId\": \"5\",\n    \"comment\": \"This is yet again another comment\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/star-wars-app-83455/us-central1/api/comment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"star-wars-app-83455",
+						"us-central1",
+						"api",
+						"comment"
+					]
+				},
+				"description": "Create a comment"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Comment",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5001/star-wars-app-83455/us-central1/api/comment/kktMfK33XENMSzVuxPB0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"star-wars-app-83455",
+						"us-central1",
+						"api",
+						"comment",
+						"kktMfK33XENMSzVuxPB0"
+					]
+				},
+				"description": "Gets a comment\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Comments For Post (Episode Number)",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5001/star-wars-app-83455/us-central1/api/comment/post/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"star-wars-app-83455",
+						"us-central1",
+						"api",
+						"comment",
+						"post",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Like A Comment",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"commentId\": \"5DgsjJD6rABz1IZ767V4\",\n    \"userId\": \"6\",\n    \"isLike\": true\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/star-wars-app-83455/us-central1/api/comment/like",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"star-wars-app-83455",
+						"us-central1",
+						"api",
+						"comment",
+						"like"
+					]
+				},
+				"description": "Likes a comment"
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Like From A Comment",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"commentId\": \"gyuspG3iZkQJe7Um3FcB\",\n    \"userId\": \"6\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5001/star-wars-app-83455/us-central1/api/comment/like",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"star-wars-app-83455",
+						"us-central1",
+						"api",
+						"comment",
+						"like"
+					]
+				},
+				"description": "Removes a like/dislike from a comment for a user\n"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
