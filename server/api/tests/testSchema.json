@@ -1,0 +1,18 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "$id": "https://gitlab.com/Morganb816/Medacist-Take-Home",
+    "title": "Comment",
+    "type": "object",
+    "properties": {
+        "propertyA": {
+            "type": "string"
+        },
+        "propertyB": {
+            "type": "number"
+        },
+        "propertyC": {
+            "type": "boolean"
+        }
+    },
+    "additionalProperties": false
+}

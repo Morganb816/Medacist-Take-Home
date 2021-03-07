@@ -9,8 +9,7 @@ const v = new Validator();
  */
 function validateSchema(schema) {
     return function(req, res, next) {
-        const validation = v.validate(req.body, schema); 
-        console.log(validation.errors);
+        const validation = v.validate(req.body, schema);
         if (validation.errors.length > 0) {
             res.status(400).send('Invalid Data');
             return;

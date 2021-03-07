@@ -1,4 +1,4 @@
-const { Storable } = require("../db/utils");
+const Storable = require("./storable");
 
 class Like extends Storable {
     constructor(commentId, userId, isLike) {

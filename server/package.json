@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha -w api/tests/**/*.test.js",
     "watch-build": "webpack --config webpack.config.js -w",
     "serve-functions": "cd functions && npm run serve",
     "start": "npm run watch-build & npm run serve-functions",
@@ -15,6 +15,7 @@
   "license": "ISC",
   "dependencies": {
     "@firebase/app": "^0.6.13",
+    "chai": "^4.3.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "firebase-admin": "^9.4.2",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "faker": "^5.1.0"
+    "faker": "^5.1.0",
+    "mocha": "^8.3.1"
   }
 }

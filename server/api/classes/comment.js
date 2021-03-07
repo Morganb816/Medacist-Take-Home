@@ -1,4 +1,4 @@
-const { Storable } = require("../db/utils");
+const Storable = require("./storable");
 
 /**
  * @name Comment
