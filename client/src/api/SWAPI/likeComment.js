@@ -1,4 +1,4 @@
-import { createAuthorizedHeaders } from "../utils";
+import { createAuthorizedHeaders, getBaseURL } from "../utils";
 
 /**
  * @name likeDislikeEndpoint
@@ -9,7 +9,7 @@ import { createAuthorizedHeaders } from "../utils";
  */
 const likeDislikeEndpoint = async (isLike, commentId) => {
     const requestHeaders = await createAuthorizedHeaders();
-    const request = await fetch(`http://localhost:5001/star-wars-app-83455/us-central1/api/comment/like`, {
+    const request = await fetch(`${getBaseURL()}comment/like`, {
         method: 'POST',
         mode: 'cors',
         headers: requestHeaders,

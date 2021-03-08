@@ -1,4 +1,4 @@
-import { createAuthorizedHeaders } from "../utils";
+import { createAuthorizedHeaders, getBaseURL } from "../utils";
 
 /**
  * @name unlikeComment
@@ -8,7 +8,7 @@ import { createAuthorizedHeaders } from "../utils";
  */
 const unlikeComment = async (commentId) => {
     const requestHeaders = await createAuthorizedHeaders();
-    await fetch(`http://localhost:5001/star-wars-app-83455/us-central1/api/comment/like`, {
+    await fetch(`${getBaseURL()}comment/like`, {
         method: 'DELETE',
         mode: 'cors',
         headers: requestHeaders,

@@ -1,4 +1,4 @@
-import { createAuthorizedHeaders } from "../utils";
+import { createAuthorizedHeaders, getBaseURL } from "../utils";
 
 /**
  * @name postComment
@@ -9,7 +9,7 @@ import { createAuthorizedHeaders } from "../utils";
  */
 const postComment = async (comment, episodeId) => {
     const requestHeaders = await createAuthorizedHeaders();
-    const request = await fetch(`http://localhost:5001/star-wars-app-83455/us-central1/api/comment`, {
+    const request = await fetch(`${getBaseURL()}comment`, {
         method: 'POST',
         mode: 'cors',
         headers: requestHeaders,
