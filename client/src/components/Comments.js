@@ -13,7 +13,7 @@ const Comment = ({comment, likes, userName, date, docId, userLiked}) => {
     const handleLike = () => dispatch(likeComment(docId));
     const handleDislike = () => dispatch(dislikeComment(docId));
 
-    const getLikedColor = (likeState) => userLiked === likeState ? 'primary' : 'default';
+    const getLikedColor = (likeState) => userLiked === likeState ? 'primary' : 'inherit';
 
     return (
         <Box p={1}>

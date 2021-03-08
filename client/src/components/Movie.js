@@ -6,6 +6,7 @@ import { fetchMovies, movieSelector } from '../store/movie';
 import { intToRomanNumeral } from '../utils';
 import CommentForm from './CommentForm';
 import Comments from './Comments';
+import MovieCrawlText from './MovieCrawlText';
 
 const Movie = (props) => {
     const movie = useSelector(movieSelector(props.match.params.movieId));
@@ -25,8 +26,14 @@ const Movie = (props) => {
 
     return (
         <Box p={2} flex={1}>
-            <Typography>{getTitleText()}</Typography>
-            <Typography>{movie?.release_date}</Typography>
+            <Box p={1}>
+                <Typography variant='h5'>{getTitleText()}</Typography>
+                <Typography variant='subtitle1'>Release Date: {movie?.release_date}</Typography>
+            </Box>
+            <Divider/>
+            <MovieCrawlText>
+                {movie?.opening_crawl}
+            </MovieCrawlText>
             <Divider/>
             <CommentForm episodeId={movie?.episode_id?.toString()}/>
             <Divider/>
