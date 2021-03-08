@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { Modal, Card, Box, Button } from '@material-ui/core';
+import PropTypes from 'prop-types';
 
+/**
+ * @name ModalButton
+ * @description Component to render a button that displays a modal when pressed
+ * @component
+ */
 const ModalButton = ({title, Component}) => {
     const [modalShowing, setModalShowing] = useState(false);
 
@@ -20,5 +26,9 @@ const ModalButton = ({title, Component}) => {
         </>
     )
 };
+ModalButton.propTypes = {
+    title: PropTypes.string,
+    Component: PropTypes.func
+}
 
 export default ModalButton;

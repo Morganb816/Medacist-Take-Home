@@ -3,17 +3,24 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { dislikeComment, likeComment, movieComments } from '../store/comments';
 import { ThumbUp, ThumbDown } from '@material-ui/icons';
+import PropTypes from 'prop-types';
 
-const ICON_SIZE = '17px';
-const LIKE_COUNT_SIZE = '15px';
-
+/**
+ * @name Comment
+ * @description Component to render one comment for a episode.
+ * @component
+ */
 const Comment = ({comment, likes, userName, date, docId, userLiked}) => {
-    const dispatch = useDispatch();
 
+    const likeCountSize = '15px';
+    const iconSize = '17px';
+
+    const dispatch = useDispatch();
+    const isAuthenticated = useSelector(state => !!state.auth.user);
     const handleLike = () => dispatch(likeComment(docId));
     const handleDislike = () => dispatch(dislikeComment(docId));
 
-    const getLikedColor = (likeState) => userLiked === likeState ? 'primary' : 'inherit';
+    const getLikedColor = (likeState) => userLiked === likeState ? 'secondary' : 'inherit';
 
     return (
         <Box p={1}>
@@ -29,20 +36,33 @@ const Comment = ({comment, likes, userName, date, docId, userLiked}) => {
                 {comment}
             </Typography>
             <Box display='flex' flexDirection='row' alignItems='center'>
-                <IconButton onClick={handleLike} size='small'>
-                    <ThumbUp style={{fontSize: ICON_SIZE}} color={getLikedColor(2)} />
+                <IconButton disabled={!isAuthenticated} onClick={handleLike} size='small'>
+                    <ThumbUp style={{fontSize: iconSize}} color={getLikedColor(2)} />
                 </IconButton>
                 <Box p={0.5} />
-                <Typography style={{fontSize: LIKE_COUNT_SIZE}} >{likes}</Typography>
+                <Typography style={{fontSize: likeCountSize}} >{likes}</Typography>
                 <Box p={0.5} />
-                <IconButton onClick={handleDislike} size='small'>
-                    <ThumbDown style={{fontSize: ICON_SIZE}} color={getLikedColor(1)} />
+                <IconButton disabled={!isAuthenticated} onClick={handleDislike} size='small'>
+                    <ThumbDown style={{fontSize: iconSize}} color={getLikedColor(1)} />
                 </IconButton>
             </Box>
         </Box>
     )
 }
+Comment.propTypes = {
+    comment: PropTypes.string,
+    likes: PropTypes.number,
+    userName: PropTypes.string,
+    date: PropTypes.number,
+    docId: PropTypes.string,
+    userLiked: PropTypes.number
+}
 
+/**
+ * @name Comments
+ * @description Renders the array of comments that are in our redux store.
+ * @component
+ */
 const Comments = () => {
     const comments = useSelector(movieComments());
     return (

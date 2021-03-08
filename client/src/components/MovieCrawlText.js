@@ -1,6 +1,7 @@
 import { Box, Card, makeStyles, Typography } from '@material-ui/core';
 import { yellow } from '@material-ui/core/colors';
 import React, { useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 
 const useStyles = makeStyles((theme) => ({
     outerContainer: {
@@ -19,10 +20,16 @@ const useStyles = makeStyles((theme) => ({
     text: {
         position: 'relative',
         fontWeight: theme.typography.fontWeightBold,
-        color: yellow[300]
+        color: yellow[300],
+        textAlign: 'center',
     }
 }))
 
+/**
+ * @name MovieCrawlText
+ * @description Component to show crawl text like the opening of the movies.
+ * @component
+ */
 const MovieCrawlText = ({children}) => {
 
     const styles = useStyles();
@@ -35,6 +42,10 @@ const MovieCrawlText = ({children}) => {
     const innerContainerRef = useRef(null);
     const textRef = useRef(null);
 
+    const crawlSpeed = 50;
+    const bottomOffset = 50;
+    const topOffset = 50;
+
     useEffect(() => {
         if (!children || !outerContainerRef.current || !textRef.current) {
             return;
@@ -45,27 +56,29 @@ const MovieCrawlText = ({children}) => {
         const scrollHeight = outerOffsetHeight + textOffsetHeight * 2;
 
         innerContainerRef.current.style.height = `${scrollHeight}px`;
-        basePos.current = scrollHeight - textOffsetHeight + 50;
+        basePos.current = scrollHeight - textOffsetHeight + bottomOffset;
         textRef.current.style.top = `${basePos.current}px`;
         pos.current = basePos.current;
 
         if (!interval.current) {
             interval.current = setInterval(() => {
                 textRef.current.style.top = `${pos.current}px`;
-                if (pos.current <= (0 - 50)) {
-                    pos.current = basePos.current + 50;
+                if (pos.current <= (0 - topOffset)) {
+                    pos.current = basePos.current;
                 } else {
                     pos.current--;
-                    console.log(pos);
                 }
-            }, 15)
+            }, crawlSpeed);
         }
+
         return () => {
-            if (interval.current) {
+            // look into this, leaving for now.
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+            if (interval.current && !outerContainerRef.current) {
                 clearInterval(interval.current);
             }
         }
-    }, [children])
+    }, [children]);
 
     return (
         <Box p={1}>
@@ -78,6 +91,9 @@ const MovieCrawlText = ({children}) => {
             </Card>
         </Box>
     )
+};
+MovieCrawlText.propTypes = {
+    children: PropTypes.oneOfType([PropTypes.node, PropTypes.arrayOf(PropTypes.node)]).isRequired
 };
 
 export default MovieCrawlText;

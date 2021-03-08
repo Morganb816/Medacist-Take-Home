@@ -1,92 +1,90 @@
 import { Box, Button, Divider, TextField, Typography } from '@material-ui/core';
 import React, { useReducer, useState } from 'react';
 import firebase from 'firebase';
+import PropTypes from 'prop-types';
 
 const SET_PASSWORD_AGAIN_ERROR = 'SET_PASSWORD_AGAIN_ERROR';
+const SET_DISPLAY_NAME_ERROR = 'SET_DISPLAY_NAME_ERROR';
 const SET_PASSWORD_AGAIN = 'SET_PASSWORD_AGAIN';
 const SET_PASSWORD_ERROR = 'SET_PASSWORD_ERROR';
+const SET_DISPLAY_NAME = 'SET_DISPLAY_NAME';
 const SET_EMAIL_ERROR = 'SET_EMAIL_ERROR';
 const SET_PASSWORD = 'SET_PASSWORD';
 const SET_EMAIL = 'SET_EMAIL';
-const SET_DISPLAY_NAME = 'SET_DISPLAY_NAME';
-const SET_DISPLAY_NAME_ERROR = 'SET_DISPLAY_NAME_ERROR';
 
 const PASSWORD_MATCH_ERROR = 'Passwords do not match. Please try again';
 const FIELD_CANNOT_BE_EMPTY = 'Field cannot be empty.';
 
 const initialState = {
-    email: { value: '', error: '' },
+    passwordAgain: { value: '', error: '' },
     displayName: { value: '', error: '' },
     password: { value: '', error: '' },
-    passwordAgain: { value: '', error: '' }
+    email: { value: '', error: '' },
 }
 
-const setEmail = (email) => ({type: SET_EMAIL, payload: email});
-const setDisplayName = (displayName) => ({type: SET_DISPLAY_NAME, payload: displayName});
-const setDisplayNameError = (displayName) => ({type: SET_DISPLAY_NAME_ERROR, payload: displayName});
-const setPassword = (password) => ({type: SET_PASSWORD, payload: password});
-const setPasswordAgain = (passwordAgain) => ({type: SET_PASSWORD_AGAIN, payload: passwordAgain});
-const setEmailError = (email) => ({type: SET_EMAIL_ERROR, payload: email});
-const setPasswordError = (password) => ({type: SET_PASSWORD_ERROR, payload: password});
 const setPasswordAgainError = (passwordAgain) => ({type: SET_PASSWORD_AGAIN_ERROR, payload: passwordAgain});
+const setDisplayNameError = (displayName) => ({type: SET_DISPLAY_NAME_ERROR, payload: displayName});
+const setPasswordAgain = (passwordAgain) => ({type: SET_PASSWORD_AGAIN, payload: passwordAgain});
+const setDisplayName = (displayName) => ({type: SET_DISPLAY_NAME, payload: displayName});
+const setPasswordError = (password) => ({type: SET_PASSWORD_ERROR, payload: password});
+const setPassword = (password) => ({type: SET_PASSWORD, payload: password});
+const setEmailError = (email) => ({type: SET_EMAIL_ERROR, payload: email});
+const setEmail = (email) => ({type: SET_EMAIL, payload: email});
 
 const authReducer = (state, action) => {
     switch (action.type) {
-        case SET_EMAIL: {
+        case SET_EMAIL: 
             return {...state, email: { value: action.payload, error: ''}};
-        }
-        case SET_DISPLAY_NAME: {
+        case SET_DISPLAY_NAME: 
             return {...state, displayName: {value: action.payload, error: ''}};
-        }
-        case SET_DISPLAY_NAME_ERROR: {
+        case SET_DISPLAY_NAME_ERROR: 
             return {...state, displayName: {...state.displayName, error: action.payload}};
-        }
-        case SET_PASSWORD: {
+        case SET_PASSWORD: 
             return {...state, password: { value: action.payload, error: ''}};
-        }
-        case SET_PASSWORD_AGAIN: {
+        case SET_PASSWORD_AGAIN: 
             return {...state, passwordAgain: { value: action.payload, error: ''} };
-        }
-        case SET_EMAIL_ERROR: {
+        case SET_EMAIL_ERROR: 
             return {...state, email: { ...state.email, error: action.payload}};
-        }
-        case SET_PASSWORD_ERROR: {
+        case SET_PASSWORD_ERROR: 
             return {...state, password: { ...state.password, error: action.payload}};
-        }
-        case SET_PASSWORD_AGAIN_ERROR: {
+        case SET_PASSWORD_AGAIN_ERROR: 
             return {...state, passwordAgain: { ...state.passwordAgain, error: action.payload}};
-        }
-        default: {
+        default: 
             return {...state}
-        }
     }
 }
 
+
+/**
+ * @name AuthModal
+ * @description Modal containing a form that lets users log in or sign up
+ * @component
+ */
 const AuthModal = ({closeModal}) => {
     const [state, dispatch] = useReducer(authReducer, initialState);
     const [isSignup, setIsSignup] = useState(false);
 
     const checkFormForErrors = () => {
         let foundErrors = false;
-        if (!state.email.value.length) {
+        const handleFoundError = (func) => {
             foundErrors = true;
-            dispatch(setEmailError(FIELD_CANNOT_BE_EMPTY));
+            func();
+        } 
+
+        if (!state.email.value.length) {
+            handleFoundError(() => dispatch(setEmailError(FIELD_CANNOT_BE_EMPTY)));
         }
         if (!state.displayName.value.length && isSignup) {
-            foundErrors = true;
-            dispatch(setDisplayNameError(FIELD_CANNOT_BE_EMPTY));
+            handleFoundError(() => dispatch(setDisplayNameError(FIELD_CANNOT_BE_EMPTY)));
         }
         if ((state.password.value !== state.passwordAgain.value) && isSignup) {
-            foundErrors = true;
-            dispatch(setPasswordAgainError(PASSWORD_MATCH_ERROR));
+            handleFoundError(() => dispatch(setPasswordAgainError(PASSWORD_MATCH_ERROR)));
         }
         if (!state.password.value.length) {
-            foundErrors = true;
-            dispatch(setPasswordError(FIELD_CANNOT_BE_EMPTY));
+            handleFoundError(() => dispatch(setPasswordError(FIELD_CANNOT_BE_EMPTY)));
         }
         if (!state.passwordAgain.value.length && isSignup) {
-            foundErrors = true;
-            dispatch(setPasswordAgainError(FIELD_CANNOT_BE_EMPTY));
+            handleFoundError(() => dispatch(setPasswordAgainError(FIELD_CANNOT_BE_EMPTY)));
         }
         return foundErrors;
     }
@@ -98,7 +96,6 @@ const AuthModal = ({closeModal}) => {
         if (error.code.includes('email') || error.code.includes('user')) {
             dispatch(setEmailError(error.message));
         }
-        console.log(error);
     }
 
     const handleSubmit = async (e) => {
@@ -111,9 +108,7 @@ const AuthModal = ({closeModal}) => {
                 await new Promise((resolve, reject) => {
                     firebase.auth().createUserWithEmailAndPassword(state.email.value, state.password.value).then(resolve).catch(reject);
                 });
-                firebase.auth().currentUser.updateProfile({
-                    displayName: state.displayName.value
-                });
+                firebase.auth().currentUser.updateProfile({ displayName: state.displayName.value });
             }
             if (!isSignup) {
                 await new Promise((resolve, reject) => {
@@ -122,9 +117,8 @@ const AuthModal = ({closeModal}) => {
             }
             closeModal();
         } catch (err) {
-            handleFirebaseAuthErrors(err)
+            handleFirebaseAuthErrors(err);
         }
-        
     }
     const toggleSignup = () => setIsSignup(!isSignup);
     const getAuthSubmitButtonText = () => isSignup ? 'Sign Up' : 'Login';
@@ -190,9 +184,14 @@ const AuthModal = ({closeModal}) => {
             <Box p={1} />
             <Button fullWidth onClick={toggleSignup}><Typography variant='body2' color='secondary'>{getToggleText()}</Typography></Button> 
             <Box p={1} />
-            <Typography>pst... you can use testemail@gmail.com and 'password' to log in</Typography>
+            <Box p={2}>
+                <Typography variant='body2'>pst... you can use starwarsnerd@gmail.com and 'password' to log in</Typography>
+            </Box>
         </>
     )
+};
+AuthModal.propTypes = {
+    closeModal: PropTypes.func.isRequired
 };
 
 export default AuthModal;

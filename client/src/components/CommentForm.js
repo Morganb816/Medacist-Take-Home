@@ -2,12 +2,19 @@ import { Box, Button, TextField, Typography } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { postComment } from '../store/comments';
+import PropTypes from 'prop-types';
 
+/**
+ * @name CommentForm
+ * @description Component containing a form that allows users who are signed in to post comments to a episodes comment fourm.
+ * @component 
+ */
 const CommentForm = ({episodeId}) => {
-    const dispatch = useDispatch();
-    const isAuthenticated = useSelector(state => !!state.auth.user);
     const [commentButtonShowing, setCommentButtonShowing] = useState(false);
     const [comment, setComment] = useState('');
+
+    const isAuthenticated = useSelector(state => !!state.auth.user);
+    const dispatch = useDispatch();
     
     const handleSubmit = e => {
         e.preventDefault();
@@ -20,7 +27,9 @@ const CommentForm = ({episodeId}) => {
         }
     }, [comment])
 
-    const handleChange = e => setComment(e.target.value);
+    const handleChange = e => {
+        setComment(e.target.value);
+    }
 
     const handleCancel = () => {
         setComment('');
@@ -60,5 +69,8 @@ const CommentForm = ({episodeId}) => {
         </Box>
     )
 };
+CommentForm.propTypes = {
+    episodeId: PropTypes.string.isRequired
+}
 
 export default CommentForm;

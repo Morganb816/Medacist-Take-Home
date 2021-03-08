@@ -7,6 +7,8 @@ import store from './store';
 import { Provider } from 'react-redux';
 import initializeFirebase from './initializeFirebase';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { CssBaseline, ThemeProvider } from '@material-ui/core';
+import theme from './theme';
 
 initializeFirebase();
 
@@ -14,7 +16,11 @@ ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <Router>
-        <App />
+        <ThemeProvider theme={theme}>
+          <CssBaseline>
+            <App />
+          </CssBaseline>
+        </ThemeProvider>
       </Router>
     </Provider>
   </React.StrictMode>,

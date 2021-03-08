@@ -7,9 +7,15 @@ import { intToRomanNumeral } from '../utils';
 import CommentForm from './CommentForm';
 import Comments from './Comments';
 import MovieCrawlText from './MovieCrawlText';
+import PropTypes from 'prop-types';
 
-const Movie = (props) => {
-    const movie = useSelector(movieSelector(props.match.params.movieId));
+/**
+ * @name Movie
+ * @description Component to render a movie page. Displays data about the movie
+ * @component
+ */
+const Movie = ({ match }) => {
+    const movie = useSelector(movieSelector(match.params.movieId));
     const dispatch = useDispatch();
     
     useEffect(() => {
@@ -40,6 +46,13 @@ const Movie = (props) => {
             <Comments />
         </Box>
     )
+};
+Movie.propTypes = {
+    match: PropTypes.shape({
+        params: PropTypes.shape({
+            movieId: PropTypes.string
+        })
+    }).isRequired
 };
 
 export default Movie;
