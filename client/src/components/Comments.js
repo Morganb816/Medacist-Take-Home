@@ -1,9 +1,19 @@
-import { Box, Divider, IconButton, Typography } from '@material-ui/core';
+import { Box, CircularProgress, Divider, IconButton, makeStyles, Typography } from '@material-ui/core';
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { dislikeComment, likeComment, movieComments } from '../store/comments';
 import { ThumbUp, ThumbDown } from '@material-ui/icons';
 import PropTypes from 'prop-types';
+import { isAuthorized } from '../store/auth';
+
+const useStyles = makeStyles(theme => ({
+    loaderContainer: {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        padding: theme.spacing(5)
+    }
+}));
 
 /**
  * @name Comment
@@ -16,12 +26,11 @@ const Comment = ({comment, likes, userName, date, docId, userLiked}) => {
     const iconSize = '17px';
 
     const dispatch = useDispatch();
-    const isAuthenticated = useSelector(state => !!state.auth.user);
+    const isAuthenticated = useSelector(isAuthorized());
     const handleLike = () => dispatch(likeComment(docId));
     const handleDislike = () => dispatch(dislikeComment(docId));
 
     const getLikedColor = (likeState) => userLiked === likeState ? 'secondary' : 'inherit';
-
     return (
         <Box p={1}>
             <Box display='flex' flexDirection='row'>
@@ -63,22 +72,40 @@ Comment.propTypes = {
  * @description Renders the array of comments that are in our redux store.
  * @component
  */
-const Comments = () => {
+const Comments = ({episodeId}) => {
     const comments = useSelector(movieComments());
+    const styles = useStyles();
+
+    const isLoading = () => {
+        if (!comments || comments.length === 0) {
+            return false;
+        } 
+        return episodeId !== Number(comments[0].postId);
+    }
+
     return (
         <Box p={2}>
             {
-                !!comments.length && comments.map((comment, i) => (
-                    <React.Fragment key={`comment-${comment.userId}-${comment.comment}`} >
-                        <Comment {...comment} />
-                        {
-                            i !== comments.length && <Divider/>
-                        }
-                    </React.Fragment>
-                ))
+                isLoading() ? (
+                    <Box className={styles.loaderContainer}>
+                        <CircularProgress color='secondary'/>
+                    </Box>
+                ) : (
+                    !!comments && comments.map((comment, i) => (
+                        <React.Fragment key={`comment-${comment.userId}-${comment.comment}`} >
+                            <Comment {...comment} />
+                            {
+                                i !== comments.length && <Divider/>
+                            }
+                        </React.Fragment>
+                    ))
+                )
             }
         </Box>
     )
 };
+Comments.propTypes = {
+    episodeId: PropTypes.number
+}
 
 export default Comments;

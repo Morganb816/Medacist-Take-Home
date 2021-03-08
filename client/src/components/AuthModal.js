@@ -130,11 +130,11 @@ const AuthModal = ({closeModal}) => {
                 <TextField
                     onChange={e => dispatch(setEmail(e.target.value))}
                     label='Email'
-                    name='email'
+                    name='user-email'
                     value={state.email.value}
                     error={!!state.email.error}
                     helperText={state.email.error}
-                    autoComplete='off'
+                    autoComplete='new-password'
                 />
                 <Box p={1} />
                 {
@@ -146,7 +146,7 @@ const AuthModal = ({closeModal}) => {
                             error={!!state.displayName.error}
                             helperText={state.displayName.error}
                             name='display-name'
-                            autoComplete='off'
+                            autoComplete='new-password'
                         />
                     )
                 }
@@ -154,12 +154,12 @@ const AuthModal = ({closeModal}) => {
                 <TextField
                     onChange={e => dispatch(setPassword(e.target.value))}
                     label='Password'
-                    name='password'
+                    name='user-password'
                     type='password'
                     value={state.password.value}
                     error={!!state.password.error}
                     helperText={state.password.error}
-                    autoComplete='off'
+                    autoComplete='new-password'
                 />
                 <Box p={1} />
                 {
@@ -172,7 +172,7 @@ const AuthModal = ({closeModal}) => {
                             error={!!state.passwordAgain.error}
                             helperText={state.passwordAgain.error}
                             name='password-again'
-                            autoComplete='off'
+                            autoComplete='new-password'
                         />
                     )
                 }

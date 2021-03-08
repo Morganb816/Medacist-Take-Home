@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { postComment } from '../store/comments';
 import PropTypes from 'prop-types';
+import { isAuthorized } from '../store/auth';
 
 /**
  * @name CommentForm
@@ -13,12 +14,13 @@ const CommentForm = ({episodeId}) => {
     const [commentButtonShowing, setCommentButtonShowing] = useState(false);
     const [comment, setComment] = useState('');
 
-    const isAuthenticated = useSelector(state => !!state.auth.user);
+    const isAuthenticated = useSelector(isAuthorized());
     const dispatch = useDispatch();
     
     const handleSubmit = e => {
         e.preventDefault();
         dispatch(postComment({comment, episodeId}));
+        handleCancel();
     }
 
     useEffect(() => {
@@ -47,16 +49,22 @@ const CommentForm = ({episodeId}) => {
             {
                 isAuthenticated ? (
                     <form name='comment-form' onSubmit={handleSubmit} autoComplete='off'>
-                        <TextField value={comment} onChange={handleChange} onBlur={handleBlur} label='Post a public comment...' fullWidth multiline/>
+                        <TextField
+                            value={comment}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            label='Post a public comment...'
+                            fullWidth
+                        />
                         <Box p={1} />
                         <Box display='flex' flexDirection='row'>
                             <Box flex={1} />
                             {
                                 commentButtonShowing && (
                                     <>
-                                        <Button onClick={handleCancel} variant='outlined' color='secondary'>Cancel</Button>
+                                        <Button onClick={handleCancel} variant='outlined' color='inherit'>Cancel</Button>
                                         <Box p={1} />
-                                        <Button type='submit' variant='outlined' color='primary'>Comment</Button>
+                                        <Button color='secondary' type='submit' variant='outlined'>Comment</Button>
                                     </>
                                 )
                             }
@@ -70,7 +78,7 @@ const CommentForm = ({episodeId}) => {
     )
 };
 CommentForm.propTypes = {
-    episodeId: PropTypes.string.isRequired
+    episodeId: PropTypes.string
 }
 
 export default CommentForm;

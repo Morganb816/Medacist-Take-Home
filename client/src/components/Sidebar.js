@@ -1,7 +1,6 @@
 import { Drawer, List, ListItem, ListItemText, Toolbar, makeStyles } from '@material-ui/core';
 import { Skeleton } from '@material-ui/lab';
 import { Link } from 'react-router-dom';
-
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMovies, moviesSelector } from '../store/movie';
@@ -16,9 +15,10 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
     },
     link: {
+        width: '100%',
         textDecoration: 'none',
         fontWeight: 'theme.typography.fontWeightBold'
-    }
+    },
 }))
 
 /**
@@ -49,7 +49,7 @@ NavItem.propTypes = {
  * @component
  */
 const LoadingNavItems = () => new Array(5).fill(null).map((x, i) => (
-    <Skeleton key={`sidebar-skeleton-${i}`}>
+    <Skeleton width='90%' height='50px' key={`sidebar-skeleton-${i}`}>
         <NavItem />
     </Skeleton>
 ))
@@ -80,13 +80,15 @@ NavItems.propTypes = {
 const Sidebar = () => {
     const movies = useSelector(moviesSelector());
     const dispatch = useDispatch();
+
     useEffect(() => {
         dispatch(fetchMovies());
-    }, [dispatch])
+    }, [dispatch]);
+    
     return (
         <Drawer anchor='left' variant='permanent' style={{zIndex: 0, width: 250}}>
             <Toolbar />
-            <List style={{width: 250}}>
+            <List style={{width: 250, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                 {
                     !movies.length ? <LoadingNavItems /> : <NavItems movies={movies} />
                 }

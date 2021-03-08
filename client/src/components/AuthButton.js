@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import ModalButton from './ModalButton';
 import firebase from 'firebase';
 import AuthModal from './AuthModal';
+import { isAuthorized } from '../store/auth';
 
 /**
  * @name AuthButton
@@ -12,13 +13,13 @@ import AuthModal from './AuthModal';
  * @component
  */
 const AuthButton = () => {
-    const isAuthenticated = useSelector(state => !!state.auth.user);
+    const isAuthenticated = useSelector(isAuthorized());
     const getAuthButtonText = () => isAuthenticated ? 'Logout' : 'Login';
     const logout = () => firebase.auth().signOut();
     
     return (
         isAuthenticated ? (
-                <Button onClick={logout}>Sign Out</Button>
+                <Button color='secondary' variant='outlined' onClick={logout}>Sign Out</Button>
             ) : (
                 <ModalButton
                     title={getAuthButtonText()}

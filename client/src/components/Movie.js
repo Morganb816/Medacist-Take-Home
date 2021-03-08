@@ -1,4 +1,4 @@
-import { Box, Divider, Typography } from '@material-ui/core';
+import { Box, Divider, makeStyles, Typography } from '@material-ui/core';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchComments } from '../store/comments';
@@ -8,6 +8,14 @@ import CommentForm from './CommentForm';
 import Comments from './Comments';
 import MovieCrawlText from './MovieCrawlText';
 import PropTypes from 'prop-types';
+import SkeletonLoader from './SkeletonLoader';
+
+const useStyles = makeStyles((theme) => ({
+    title: {
+        fontWeight: theme.typography.fontWeightBold,
+        color: theme.palette.secondary.main
+    },
+}))
 
 /**
  * @name Movie
@@ -17,7 +25,8 @@ import PropTypes from 'prop-types';
 const Movie = ({ match }) => {
     const movie = useSelector(movieSelector(match.params.movieId));
     const dispatch = useDispatch();
-    
+    const styles = useStyles();
+
     useEffect(() => {
         dispatch(fetchMovies());
     }, [dispatch]);
@@ -28,22 +37,21 @@ const Movie = ({ match }) => {
         }
     }, [movie, dispatch])
     
-    const getTitleText = () => `${movie?.title} | Episode ${intToRomanNumeral(movie?.episode_id)}`
-
+    const getTitleText = () => movie?.title && `${movie?.title} | Episode ${intToRomanNumeral(movie?.episode_id)}`;
+    const getReleaseText = () => movie?.release_date && `Release Date: ${movie?.release_date}`;
+    
     return (
         <Box p={2} flex={1}>
             <Box p={1}>
-                <Typography variant='h5'>{getTitleText()}</Typography>
-                <Typography variant='subtitle1'>Release Date: {movie?.release_date}</Typography>
+                <Typography className={styles.title} variant='h5'>{getTitleText()}</Typography>
+                <Typography variant='subtitle1'>{getReleaseText()}</Typography>
             </Box>
             <Divider/>
-            <MovieCrawlText>
-                {movie?.opening_crawl}
-            </MovieCrawlText>
+            <MovieCrawlText title={movie?.title} episodeId={intToRomanNumeral(movie?.episode_id)} text={movie?.opening_crawl} />
             <Divider/>
             <CommentForm episodeId={movie?.episode_id?.toString()}/>
             <Divider/>
-            <Comments />
+            <Comments episodeId={movie?.episode_id}/>
         </Box>
     )
 };

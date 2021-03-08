@@ -42,12 +42,23 @@ const Home = () => {
                 <Divider />
             </Box>
             <Box className={styles.linkContainer}>
-            <a className={styles.linkText} href='https://github.com/Morganb816/Medacist-Take-Home'>
-                <Button className={styles.button} variant='outlined'>
+            <a
+                href='https://github.com/Morganb816/Medacist-Take-Home'
+                className={styles.linkText}
+                rel="noreferrer"
+                target='_blank'
+            >
+                <Button
+                    className={styles.button}
+                    variant='outlined'
+                    color='secondary'
+                >
                     <Box className={styles.buttonInnerContainer}>
                         <GitHubIcon />
                         <Box p={1} />
-                        <Typography variant='body1'>Check out the code!</Typography>
+                        <Typography variant='body1'>
+                            Check out the code!
+                        </Typography>
                     </Box>
                 </Button>
             </a>

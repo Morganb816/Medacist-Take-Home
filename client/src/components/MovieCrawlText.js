@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     },
     innerContainer: {
         width: '50%',
-        transform: 'rotateX(25deg)',
+        transform: 'rotateX(50deg)',
         position: 'relative'
     },
     text: {
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
  * @description Component to show crawl text like the opening of the movies.
  * @component
  */
-const MovieCrawlText = ({children}) => {
+const MovieCrawlText = ({text, title, episodeId}) => {
 
     const styles = useStyles();
 
@@ -42,12 +42,16 @@ const MovieCrawlText = ({children}) => {
     const innerContainerRef = useRef(null);
     const textRef = useRef(null);
 
-    const crawlSpeed = 50;
+    const crawlSpeed = 35;
+    
+    // We need these offsets to account for the perspective of the div.
+    // Im sure you could do some math to get the exact number but considering
+    // this works fine i think that implementation would be overkill.
     const bottomOffset = 50;
-    const topOffset = 50;
+    const topOffset = 150;
 
     useEffect(() => {
-        if (!children || !outerContainerRef.current || !textRef.current) {
+        if (!text || !outerContainerRef.current || !textRef.current) {
             return;
         } 
 
@@ -78,22 +82,26 @@ const MovieCrawlText = ({children}) => {
                 clearInterval(interval.current);
             }
         }
-    }, [children]);
+    }, [text]);
 
     return (
         <Box p={1}>
             <Card elevation={3} ref={outerContainerRef} className={styles.outerContainer}>
                 <Box ref={innerContainerRef} className={styles.innerContainer}>
-                    <Typography ref={textRef} variant='body1' className={styles.text}>
-                        {children}
-                    </Typography>
+                    <Box ref={textRef} variant='body1' className={styles.text}>
+                        <Typography variant='h4'>{title}</Typography>
+                        <Typography variant='h6'>Episode {episodeId}</Typography>
+                        <Typography variant='body1'>{text}</Typography>
+                    </Box>
                 </Box>
             </Card>
         </Box>
     )
 };
 MovieCrawlText.propTypes = {
-    children: PropTypes.oneOfType([PropTypes.node, PropTypes.arrayOf(PropTypes.node)]).isRequired
+    text: PropTypes.string,
+    episodeId: PropTypes.string,
+    title: PropTypes.string
 };
 
 export default MovieCrawlText;

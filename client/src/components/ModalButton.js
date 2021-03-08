@@ -15,7 +15,7 @@ const ModalButton = ({title, Component}) => {
 
     return (
         <>
-        <Button onClick={handleOpenModal}>{title}</Button>
+        <Button color='secondary' variant='outlined' onClick={handleOpenModal}>{title}</Button>
         <Modal open={modalShowing} onClose={handleCloseModal}>
             <Card style={{position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)'}}>
                 <Box p={2}>
