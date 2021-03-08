@@ -7,9 +7,6 @@
         "commentId": {
             "type": "string"
         },
-        "userId": {
-            "type": "string"
-        },
         "isLike": {
             "type": "boolean"
         }

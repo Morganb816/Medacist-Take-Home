@@ -7,9 +7,6 @@
         "postId": {
             "type": "string"
         },
-        "userId": {
-            "type": "string"
-        },
         "comment": {
             "type": "string"
         }

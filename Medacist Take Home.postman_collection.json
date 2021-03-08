@@ -13,7 +13,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"postId\": \"2\",\n    \"userId\": \"5\",\n    \"comment\": \"This is yet again another comment\"\n}",
+					"raw": "{\n    \"postId\": \"2\",\n    \"userId\": \"5\",\n    \"userName\": \"Morgan Brown\",\n    \"comment\": \"This is yet again another comment\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -44,7 +44,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5001/star-wars-app-83455/us-central1/api/comment/kktMfK33XENMSzVuxPB0",
+					"raw": "http://localhost:5001/star-wars-app-83455/us-central1/api/comment/gyuspG3iZkQJe7Um3FcB",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -55,7 +55,7 @@
 						"us-central1",
 						"api",
 						"comment",
-						"kktMfK33XENMSzVuxPB0"
+						"gyuspG3iZkQJe7Um3FcB"
 					]
 				},
 				"description": "Gets a comment\n"
@@ -68,7 +68,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:5001/star-wars-app-83455/us-central1/api/comment/post/2",
+					"raw": "http://localhost:5001/star-wars-app-83455/us-central1/api/comment/post/4",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -80,7 +80,7 @@
 						"api",
 						"comment",
 						"post",
-						"2"
+						"4"
 					]
 				}
 			},
@@ -93,7 +93,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"commentId\": \"5DgsjJD6rABz1IZ767V4\",\n    \"userId\": \"6\",\n    \"isLike\": true\n}",
+					"raw": "{\n    \"commentId\": \"gyuspG3iZkQJe7Um3FcB\",\n    \"userId\": \"6\",\n    \"isLike\": true\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -149,6 +149,57 @@
 					]
 				},
 				"description": "Removes a like/dislike from a comment for a user\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Authorize",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setGlobalVariable(\"id_token\", jsonData.idToken);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"email\":\"testuser@gmail.com\",\"password\":\"password\",\"returnSecureToken\":true}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyDLFtotj1-e_2mgbMPTmtnbsrSrSHuMLyY",
+					"protocol": "https",
+					"host": [
+						"www",
+						"googleapis",
+						"com"
+					],
+					"path": [
+						"identitytoolkit",
+						"v3",
+						"relyingparty",
+						"verifyPassword"
+					],
+					"query": [
+						{
+							"key": "key",
+							"value": "AIzaSyDLFtotj1-e_2mgbMPTmtnbsrSrSHuMLyY"
+						}
+					]
+				},
+				"description": "Authorize against firebase"
 			},
 			"response": []
 		}

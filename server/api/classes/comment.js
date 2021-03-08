@@ -7,14 +7,20 @@ const Storable = require("./storable");
  * @property {string} comment - Comment made by the user.
  * @property {string} postId - Id of the post (Episode Number) the user commented on.
  * @property {number} likes - Amount of likes this comment has.
+ * @property {string} docId - Document Id of this comment.
+ * @property {number} userLiked - Number to indicate whether or not the user liked/disliked this comment
  */
 class Comment extends Storable {
-    constructor(userId, comment, postId, likes = 0) {
-        super('likes');
+    constructor(userId, userName, comment, postId, date, likes = 0, docId = '', userLiked = 0) {
+        super('likes', 'docId', 'userLiked');
         this.userId = userId;
+        this.userName = userName;
         this.comment = comment;
         this.postId = postId;
+        this.date = date;
         this.likes = likes;
+        this.docId = docId;
+        this.userLiked = userLiked;
     }
 }
 

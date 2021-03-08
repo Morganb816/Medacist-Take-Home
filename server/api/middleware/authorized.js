@@ -4,13 +4,16 @@ const admin = require('firebase-admin');
  * @name authorized
  * @async
  * @function
+ * @param {boolean} looselyAuthorized - If true, the middleware will not throw an error if the user is not authorized.
  * @description Middleware that provides validation that the user is authorized. Also attaches a decoded user object to the request of this http call for use later.
- * @param {Request} req Request object for this http call
- * @param {Response} res Response object for this http call
- * @param {Next} next callback to trigger the next function in this chain
+ * @returns {Function}
  */
-async function authorized(req, res, next) {
+const authorized = (looselyAuthorized = false) => async (req, res, next) => {
     if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
+        if (looselyAuthorized) {
+            next();
+            return;
+        }
         res.status(403).send('Unauthorized');
         return;
     }
@@ -21,6 +24,7 @@ async function authorized(req, res, next) {
         req.user = decodedIdToken;
         next();
     } catch (err) {
+        console.log(err);
         res.status(403).send('Unauthorized');
         return;
     }

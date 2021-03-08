@@ -6,14 +6,16 @@ const COMMENT_COLLECTION_PATH = 'comments';
 const LIKES_COLLECTION_PATH = 'likes';
 
 const seedSettings = {
-    maxComments: 250,
+    maxComments: 25,
     maxLikesPerComment: 25
 };
 
 const createComment = () => new Comment(
     faker.random.alphaNumeric(10),
-    faker.random.alphaNumeric(10),
-    faker.random.number(6).toString()
+    faker.name.firstName() + faker.name.lastName(),
+    faker.random.words(10),
+    faker.random.number(6).toString(),
+    Date.now()
 ).getStorable();
 
 const createLike = (commentId) => new Like(

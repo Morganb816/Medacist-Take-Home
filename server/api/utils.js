@@ -33,6 +33,7 @@ const serviceFactory = (func, errorCodes = [], customErrorHandler) => {
         try {
             return await func(req, res, next);
         } catch (err) {
+            console.log(err)
             if (customErrorHandler) {
                 customErrorHandler(err, req, res, next);
                 return;

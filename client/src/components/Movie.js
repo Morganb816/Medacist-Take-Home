@@ -1,0 +1,38 @@
+import { Box, Divider, Typography } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchComments } from '../store/comments';
+import { fetchMovies, movieSelector } from '../store/movie';
+import { intToRomanNumeral } from '../utils';
+import CommentForm from './CommentForm';
+import Comments from './Comments';
+
+const Movie = (props) => {
+    const movie = useSelector(movieSelector(props.match.params.movieId));
+    const dispatch = useDispatch();
+    
+    useEffect(() => {
+        dispatch(fetchMovies());
+    }, [dispatch]);
+
+    useEffect(() => {
+        if (movie) {
+            dispatch(fetchComments(movie.episode_id))
+        }
+    }, [movie, dispatch])
+    
+    const getTitleText = () => `${movie?.title} | Episode ${intToRomanNumeral(movie?.episode_id)}`
+
+    return (
+        <Box p={2} flex={1}>
+            <Typography>{getTitleText()}</Typography>
+            <Typography>{movie?.release_date}</Typography>
+            <Divider/>
+            <CommentForm episodeId={movie?.episode_id?.toString()}/>
+            <Divider/>
+            <Comments />
+        </Box>
+    )
+};
+
+export default Movie;

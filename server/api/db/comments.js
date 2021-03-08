@@ -24,6 +24,30 @@ const findLikeOnCommentForUser = (commentId, userId) => admin.firestore()
 .get()
 
 /**
+ * @name checkLikeArrayForUserLike
+ * @description Checks a like array to see if a user has liked or disliked the comment related to the array
+ * @param {string} userId Id of user to check if liked
+ * @returns {number} Returns 0 if user has not interacted with the comment, Returns 1 if they disliked, Returns 2 if they liked.
+ */
+const checkLikeArrayForUserLike = (userId, likeArray) => {
+    if (!userId) {
+        return 0;
+    }
+    return likeArray.reduce((hasLiked, currentLike) => {
+        if (hasLiked) {
+            return hasLiked;
+        }
+        if (currentLike.userId === userId) {
+            if (currentLike.isLike) {
+                return 2;
+            }
+            return 1;
+        }
+        return 0;
+    }, 0);
+}
+
+/**
  * @name getLikesFromLikeArray
  * @description Returns the total amount of likes (accounting for dislikes) from a given like array.
  * @param {Like[]} likeArray Array of likes to total
@@ -104,15 +128,19 @@ const deleteLike = async (commentId, userId) => {
  * @name makeComment
  * @description Creates a comment for a post by a user.
  * @param {string} userId Id of user creating this comment
+ * @param {string} userName Display name of user.
  * @param {string} comment Comment user wishes to make
  * @param {string} postId Post this comment is realted to (Episode Number)
  * @returns {Comment}
  */
-const makeComment = async (userId, comment, postId) => getCreatedData(
-    admin.firestore()
-        .collection(COMMENTS_COLLECTION)
-        .add(new Comment(userId, comment, postId).getStorable())
-);
+const makeComment = async (userId, userName, comment, postId, date) => {
+    const createdData = await getCreatedData(
+        admin.firestore()
+            .collection(COMMENTS_COLLECTION)
+            .add(new Comment(userId, userName, comment, postId, date).getStorable())
+    );
+    return new Comment(createdData.userId, createdData.userName, createdData.comment, createdData.postId, createdData.date, 0, createdData.id, 0)
+}
 
 /**
  * @name getComment
@@ -120,13 +148,21 @@ const makeComment = async (userId, comment, postId) => getCreatedData(
  * @param {string} docId Document ID of the comment we wish to retrieve.
  * @returns {Comment}
  */
-const getComment = async (docId) => {
+const getComment = async (docId, userId) => {
     const [foundComment, foundLikes] = await Promise.all([
         getDataIfExists(admin.firestore().collection(COMMENTS_COLLECTION).doc(docId).get()),
         getLikesForComment(docId)
     ]);
 
-    return new Comment(foundComment.userId, foundComment.comment, foundComment.postId, getLikesFromLikeArray(foundLikes)).getData();
+    return new Comment(
+        foundComment.userId,
+        foundComment.userName,
+        foundComment.comment,
+        foundComment.postId,
+        foundComment.date,
+        getLikesFromLikeArray(foundLikes),
+        foundComment.id,
+        checkLikeArrayForUserLike(userId, foundLikes)).getData();
 }
 
 /**
@@ -135,19 +171,28 @@ const getComment = async (docId) => {
  * @param {string} postId Id of the post we wish to retrieve comments for (Episode Number)
  * @returns {Comment[]}
  */
-const getCommentsForPost = async (postId) => {
+const getCommentsForPost = async (postId, userId) => {
     const commentQuery = await admin.firestore()
             .collection(COMMENTS_COLLECTION)
             .where(POST_ID, '==', postId)
+            .orderBy('date', 'desc')
             .get();
 
     const likesArray = await Promise.all(commentQuery.docs.map(doc => getLikesForComment(doc.id)));
     
     const comments = commentQuery.docs.map((commentRef, i) => {
         const commentData = commentRef.data();
-        return new Comment(commentData.userId, commentData.comment, commentData.postId, getLikesFromLikeArray(likesArray[i])).getData();
+        return new Comment(
+            commentData.userId,
+            commentData.userName,
+            commentData.comment,
+            commentData.postId,
+            commentData.date,
+            getLikesFromLikeArray(likesArray[i]),
+            commentRef.id,
+            checkLikeArrayForUserLike(userId, likesArray[i])
+        ).getData();
     });
-
     return comments;
 };
 
