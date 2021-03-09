@@ -5,6 +5,8 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMovies, moviesSelector } from '../store/movie';
 import PropTypes from 'prop-types';
+import useDimensions from '../hooks/useWindowSize';
+import { sidebarOpen, toggleSidebar } from '../store/general';
 
 const useStyles = makeStyles((theme) => ({
     navItemText: {
@@ -19,6 +21,10 @@ const useStyles = makeStyles((theme) => ({
         textDecoration: 'none',
         fontWeight: 'theme.typography.fontWeightBold'
     },
+    drawer: {
+        zIndex: 0,
+        width: '250px'
+    }
 }))
 
 /**
@@ -26,11 +32,11 @@ const useStyles = makeStyles((theme) => ({
  * @description Component which renders a single nav item for the sidebar
  * @component
  */
-const NavItem = ({movie}) => {
+const NavItem = ({movie, handleClose}) => {
     const styles = useStyles();
     return (
         <Link className={styles.link} to={`/movie/${movie?.title}`}>
-            <ListItem className={styles.navItem} button>
+            <ListItem onClick={handleClose} className={styles.navItem} button>
                 <ListItemText className={styles.navItemText} primary={movie?.title}/>
             </ListItem>
         </Link>
@@ -59,9 +65,9 @@ const LoadingNavItems = () => new Array(5).fill(null).map((x, i) => (
  * @description Component which renders nav items for the sidebar and handles showing skeleton items while real ones are loading.
  * @component
  */
-const NavItems = ({movies}) => (
+const NavItems = ({movies, handleClose}) => (
     movies.map(movie => (
-        <NavItem movie={movie} key={`sidebar-nav-link-${movie?.title}`}/>
+        <NavItem movie={movie} key={`sidebar-nav-link-${movie?.title}`} handleClose={handleClose} />
     ))
 )
 NavItems.propTypes = {
@@ -80,17 +86,31 @@ NavItems.propTypes = {
 const Sidebar = () => {
     const movies = useSelector(moviesSelector());
     const dispatch = useDispatch();
+    const dimensions = useDimensions();
+    const isOpen = useSelector(sidebarOpen());
+
+    const mobileWidth = 750;
 
     useEffect(() => {
         dispatch(fetchMovies());
     }, [dispatch]);
     
+    const handleClose = () => {
+        dispatch(toggleSidebar())
+    }
+
     return (
-        <Drawer anchor='left' variant='permanent' style={{zIndex: 0, width: 250}}>
+        <Drawer
+            anchor='left'
+            variant={dimensions.width <= mobileWidth ? 'temporary' : 'permanent'}
+            open={isOpen}
+            onClose={handleClose}
+            style={{zIndex: 0, width: 250}}
+        >
             <Toolbar />
             <List style={{width: 250, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
                 {
-                    !movies.length ? <LoadingNavItems /> : <NavItems movies={movies} />
+                    !movies.length ? <LoadingNavItems /> : <NavItems movies={movies} handleClose={handleClose}/>
                 }
             </List>
         </Drawer>

@@ -1,3 +1,5 @@
+import { createAuthorizedHeaders, getBaseURL } from "../utils";
+
 /**
  * @typedef Comment
  * @property {string} userId - Id of user who made the comment.
@@ -5,8 +7,6 @@
  * @property {string} postId - Id of episode this comment belongs to.
  * @property {number} likes - Amount of likes this comment has (includes dislikes).
  */
-
-import { createAuthorizedHeaders, getBaseURL } from "../utils";
 
 /**
  * @name getComments

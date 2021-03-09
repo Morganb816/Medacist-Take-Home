@@ -1,5 +1,5 @@
 const { initializeApp, createSeeder, deleteCollections, runMultipleParalellTimes, getAllDocIdsInCollection } = require("./utils");
-const { Comment, Like } = require('../api/classes');
+const { Comment, Like } = require('../functions/api/classes');
 const faker = require('faker');
 
 const COMMENT_COLLECTION_PATH = 'comments';

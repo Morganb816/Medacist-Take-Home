@@ -21,22 +21,22 @@ const CommentForm = ({episodeId}) => {
         e.preventDefault();
         dispatch(postComment({comment, episodeId}));
         handleCancel();
-    }
+    };
 
     useEffect(() => {
         if (comment.length) {
             setCommentButtonShowing(true);
         }
-    }, [comment])
+    }, [comment]);
 
     const handleChange = e => {
         setComment(e.target.value);
-    }
+    };
 
     const handleCancel = () => {
         setComment('');
         setCommentButtonShowing(false);
-    }
+    };
 
     const handleBlur = () => {
         if (!comment.length) {
@@ -48,30 +48,49 @@ const CommentForm = ({episodeId}) => {
         <Box p={1}>
             {
                 isAuthenticated ? (
-                    <form name='comment-form' onSubmit={handleSubmit} autoComplete='off'>
+                    <form
+                        name='comment-form'
+                        onSubmit={handleSubmit}
+                        autoComplete='off'
+                    >
+                        <label htmlFor='comment'>
                         <TextField
+                            name='comment'
                             value={comment}
                             onChange={handleChange}
                             onBlur={handleBlur}
                             label='Post a public comment...'
                             fullWidth
                         />
+                        </label>
                         <Box p={1} />
                         <Box display='flex' flexDirection='row'>
                             <Box flex={1} />
                             {
                                 commentButtonShowing && (
                                     <>
-                                        <Button onClick={handleCancel} variant='outlined' color='inherit'>Cancel</Button>
+                                        <Button
+                                            onClick={handleCancel}
+                                            variant='outlined'
+                                            color='inherit'
+                                        >
+                                            Cancel
+                                        </Button>
                                         <Box p={1} />
-                                        <Button color='secondary' type='submit' variant='outlined'>Comment</Button>
+                                        <Button
+                                            color='secondary'
+                                            type='submit'
+                                            variant='outlined'
+                                        >Comment</Button>
                                     </>
                                 )
                             }
                         </Box>
                     </form>
                 ) : (
-                    <Typography variant='body2'>Please login to post a comment</Typography>
+                    <Typography variant='body2'>
+                        Please login to post a comment.
+                    </Typography>
                 )
             }
         </Box>

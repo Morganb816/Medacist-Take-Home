@@ -74,7 +74,7 @@ const initializeApp = () => {
 
     let serviceAccount;
     try {
-        serviceAccount = require('../api/serviceAccount.json');
+        serviceAccount = require('./serviceAccount.json');
     } catch (err) {
         console.log(NO_SERVICE_ACCOUNT_FOUND);
         process.exit();

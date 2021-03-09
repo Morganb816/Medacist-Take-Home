@@ -1,7 +1,11 @@
 import React from 'react';
-import { AppBar, Box, makeStyles, Toolbar, Typography } from '@material-ui/core';
+import { AppBar, Box, Button, makeStyles, Toolbar, Typography } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import AuthButton from './AuthButton';
+import { Menu } from '@material-ui/icons';
+import { useDispatch } from 'react-redux';
+import { toggleSidebar } from '../store/general';
+import useWindowSize from '../hooks/useWindowSize';
 
 const useStyles = makeStyles(theme => ({
     title: {
@@ -18,11 +22,19 @@ const useStyles = makeStyles(theme => ({
  */
 const Header = () => {
     const styles = useStyles();
+    const dispatch = useDispatch();
+    const dimensions = useWindowSize();
+    const mobileSize = 750;
+
+    const handleMenuPress = () => {
+        dispatch(toggleSidebar());
+    }
+
     return (
         <AppBar position='fixed'>
             <Toolbar>
                 <Typography
-                    variant='h5'
+                    variant={dimensions.width <= mobileSize ? 'h6' : 'h5'}
                     className={styles.title}
                     component={Link}
                     to='/'
@@ -31,6 +43,19 @@ const Header = () => {
                 </Typography>
                 <Box flex={1} />
                 <AuthButton />
+                <Box p={1} />
+                {
+                    dimensions.width <= mobileSize && (
+                        <Button
+                            name='menu'
+                            color='secondary'
+                            variant='outlined'
+                            onClick={handleMenuPress}
+                        >
+                            <Menu />
+                        </Button>
+                    )
+                }
             </Toolbar>
         </AppBar>
     )

@@ -5,23 +5,24 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha -w api/tests/**/*.test.js",
-    "watch-build": "webpack --config webpack.config.js -w",
     "serve-functions": "cd functions && npm run serve",
-    "start": "npm run watch-build & npm run serve-functions",
-    "seed": "npx cross-env FIRESTORE_EMULATOR_HOST='localhost:8080' node ./seed/index.js"
+    "start": "npm run serve-functions",
+    "seed": "npx cross-env FIRESTORE_EMULATOR_HOST='localhost:8080' node ./seed/index.js",
+    "deploy": "firebase deploy --only functions"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@firebase/app": "^0.6.13",
     "chai": "^4.3.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "firebase": "^8.2.10",
     "firebase-admin": "^9.4.2",
     "jsonschema": "^1.4.0",
     "morgan": "^1.10.0",
     "node-fetch": "^2.6.1",
+    "request": "^2.79.0",
     "webpack": "^5.11.1",
     "webpack-cli": "^4.3.1"
   },

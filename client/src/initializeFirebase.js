@@ -1,5 +1,9 @@
 import firebase from 'firebase';
 
+/**
+ * @name firebaseConfig
+ * @description Configuration for firebase
+ */
 const firebaseConfig = {
     apiKey: "AIzaSyDLFtotj1-e_2mgbMPTmtnbsrSrSHuMLyY",
     authDomain: "star-wars-app-83455.firebaseapp.com",
@@ -9,6 +13,11 @@ const firebaseConfig = {
     appId: "1:784925783836:web:b180f7ee7a9e7bdee8acd9"
 };
 
+/**
+ * @name initializeFirebase
+ * @description Initializes our firebase application. should be called ASAP
+ * @returns {void}
+ */
 const initializeFirebase = () => {
     firebase.initializeApp(firebaseConfig);
 };

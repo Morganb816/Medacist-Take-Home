@@ -1,17 +1,31 @@
-import { Toolbar } from "@material-ui/core";
+import { makeStyles, Toolbar } from "@material-ui/core";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
 import useAuthStateChange from "./hooks/useAuthStateChange";
 import MainRoutes from "./MainRoutes";
 
+const useStyles = makeStyles(() => ({
+    outerContainer: {
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100vh'
+    },
+    innerContainer: {
+      display: 'flex',
+      flexDirection: 'row',
+      flex: 1,
+    }
+}));
+ 
 const App = () => {
+  const styles = useStyles();
   useAuthStateChange();
   return (
-    <div style={{display: 'flex', flexDirection: 'column', height: '100vh'}}>
+    <div className={styles.outerContainer}>
       <Header />
       <Toolbar />
-      <div style={{flex: 1, display: 'flex', flexDirection: 'row'}}>
-        <Sidebar movies={[{title: 'test 1'},{title: 'test 2'},{title: 'test 3'},{title: 'test 6'},]} />
+      <div className={styles.innerContainer}>
+        <Sidebar />
         <MainRoutes />
       </div>
     </div>

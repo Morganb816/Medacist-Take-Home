@@ -1,19 +1,25 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-export const isLoading = () => state => state.general.loading;
+/**
+ * @name 
+ * @description Returns wether or not the sidebar is open in state
+ * @returns {boolean}
+ */
+export const sidebarOpen = () => state => state.general.sidebarIsOpen;
 
-export const generalSlice = createSlice({
+/**
+ * @name genearalSlice
+ * @description Redux slice for managing general applciation state.
+ */
+const genearalSlice = createSlice({
     name: 'general',
-    initialState: {
-        isLoading: false,
-        sideBarOpen: false,
-    },
+    initialState: {sidebarIsOpen: false},
     reducers: {
-        setLoading: (state, newLoadingState) => {
-            state.isLoading = newLoadingState;
+        toggleSidebar: (state) => {
+            state.sidebarIsOpen = !state.sidebarIsOpen;
         }
-    }
+    },
 });
 
-export const { setLoading } = generalSlice.actions;
-export default generalSlice.reducer;
+export const { toggleSidebar } = genearalSlice.actions;
+export default genearalSlice.reducer;

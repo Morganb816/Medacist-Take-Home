@@ -20,7 +20,7 @@ const initialState = {
     displayName: { value: '', error: '' },
     password: { value: '', error: '' },
     email: { value: '', error: '' },
-}
+};
 
 const setPasswordAgainError = (passwordAgain) => ({type: SET_PASSWORD_AGAIN_ERROR, payload: passwordAgain});
 const setDisplayNameError = (displayName) => ({type: SET_DISPLAY_NAME_ERROR, payload: displayName});

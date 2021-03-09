@@ -25,10 +25,10 @@ const Comment = ({comment, likes, userName, date, docId, userLiked}) => {
     const likeCountSize = '15px';
     const iconSize = '17px';
 
-    const dispatch = useDispatch();
-    const isAuthenticated = useSelector(isAuthorized());
-    const handleLike = () => dispatch(likeComment(docId));
     const handleDislike = () => dispatch(dislikeComment(docId));
+    const handleLike = () => dispatch(likeComment(docId));
+    const isAuthenticated = useSelector(isAuthorized());
+    const dispatch = useDispatch();
 
     const getLikedColor = (likeState) => userLiked === likeState ? 'secondary' : 'inherit';
     return (
@@ -45,13 +45,13 @@ const Comment = ({comment, likes, userName, date, docId, userLiked}) => {
                 {comment}
             </Typography>
             <Box display='flex' flexDirection='row' alignItems='center'>
-                <IconButton disabled={!isAuthenticated} onClick={handleLike} size='small'>
+                <IconButton name='like-comment' disabled={!isAuthenticated} onClick={handleLike} size='small'>
                     <ThumbUp style={{fontSize: iconSize}} color={getLikedColor(2)} />
                 </IconButton>
                 <Box p={0.5} />
                 <Typography style={{fontSize: likeCountSize}} >{likes}</Typography>
                 <Box p={0.5} />
-                <IconButton disabled={!isAuthenticated} onClick={handleDislike} size='small'>
+                <IconButton name='like-comment' disabled={!isAuthenticated} onClick={handleDislike} size='small'>
                     <ThumbDown style={{fontSize: iconSize}} color={getLikedColor(1)} />
                 </IconButton>
             </Box>
